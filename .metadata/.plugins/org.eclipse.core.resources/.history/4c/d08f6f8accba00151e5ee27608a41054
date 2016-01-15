@@ -1,0 +1,85 @@
+import java.awt.Color;
+import java.util.ArrayList;
+
+public class Load {
+	
+	public void moveDown(Parcel parcel,Truck truck){
+		while(!collide(parcel, truck,3)){
+			move(parcel, 3);
+			System.out.println("I move!");
+		}
+		System.out.println("X: "+parcel.coordinates[0]+"Y: "+parcel.coordinates[1]+"Z: "+parcel.coordinates[2]);
+		System.out.println("I'm out!");
+	}
+	public void moveRight(Parcel parcel,Truck truck){
+		while(!collide(parcel, truck,2)){
+			move(parcel, 2);			
+		}
+	}
+	public void moveForward(Parcel parcel,Truck truck){
+		while(!collide(parcel, truck,1)){
+			move(parcel, 1);			
+		}
+	}
+	public void move(Parcel parcel,int axis){
+		int coord[] = parcel.getCoord();
+		switch(axis){
+			case 1:
+				parcel.setCoord(coord[0]+1, coord[1], coord[2]);
+				break;
+			case 2:
+				parcel.setCoord(coord[0], coord[1]+1, coord[2]);
+				break;
+			case 3:
+				parcel.setCoord(coord[0], coord[1], coord[2]+1);
+				break;
+		}
+	}
+	public boolean collide(Parcel parcel, Truck truck, int axis){
+		int cX = parcel.coordinates[0];
+		int cY = parcel.coordinates[1];
+		int cZ = parcel.coordinates[2];
+		double parcel_width = parcel.width * 2;
+		double parcel_heigth = parcel.heigth * 2;
+		double parcel_length = parcel.length * 2;
+		boolean statement = false;
+		
+		switch(axis){
+			case 1: 
+					cX++;
+					for(int i = cZ; i<=cZ+parcel_heigth;i++){
+						for(int j = cY; j<=cY+parcel_width;j++){
+						if(truck.space[cX][cZ][cY]!= Color.WHITE)
+							statement = true;
+						}
+					}
+					statement = false;
+					break;
+			case 2: 
+					cY++;
+					for(int i = cX; i<=cX+parcel_length;i++){
+						for(int j = cZ; j<=cZ+parcel_heigth;j++){
+						if(truck.space[cX][cZ][cY]!= Color.WHITE)
+							statement = true;
+						}
+					}
+					statement = false;
+					break;
+			case 3: 
+					cZ++;
+					for(int i = cX; i<=cX+parcel_length;i++){
+						for(int j = cY; j<=cY+parcel_width;j++){
+						if(truck.space[cX][cZ][cY]!= Color.WHITE)
+							statement = true;
+						}
+					}
+					statement = false;
+					break;
+		}
+		return statement;
+		
+			
+		
+	}
+	
+}

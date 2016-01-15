@@ -1,0 +1,29 @@
+import java.util.ArrayList;
+
+public class GreedyAlgorithm{
+	
+	public ArrayList<Parcel> list;
+	public Truck truck;
+	public Load load;
+	public Parcel parcel;
+
+	
+	public GreedyAlgorithm(ArrayList<Parcel> list, Truck truck, Load load){
+		this.list = list;
+		this.truck = truck;
+		this.load = load;
+	}
+	public void start(int path){
+		switch(path){
+			case 1:
+				parcel = list.get(((int)(Math.random()*3))+1);
+				start(2);
+			case 2:
+				if(load.collide(parcel, truck, 0)){
+					load.move(parcel, 2);
+					if(parcel.)
+				}
+		}
+	}
+	
+}

@@ -1,0 +1,26 @@
+import java.util.ArrayList;
+
+public class GreedyAlgorithm{
+	
+	public void start(ArrayList<Parcel> list, Truck truck, Load load){
+		Parcel parcel_a = list.get((int)(Math.random()*3)+1);
+		truck.put(parcel_a);
+		load.moveDown(parcel_a, truck);
+		
+		double high = high + parcel_a.height;
+		
+		while(count<3){
+			Parcel parcel = list.get((int)(Math.random()*3)+1);
+			while((load.collide(parcel, truck, 0))&&((parcel.coordinates[1]+parcel.width)<5)){
+				load.move(parcel, 2);
+			}
+			if((parcel.coordinates[1]+parcel.width)==5){
+				while((load.collide(parcel, truck, 0))&&((parcel.coordinates[1]+parcel.width)<5)){
+					load.move(parcel, 1);
+				}
+			}
+		}
+
+	}
+	
+}

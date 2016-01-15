@@ -19,7 +19,7 @@ public class Truck {
 		//inizializing the list of parcels 
 		parcelList= new ArrayList<Parcel>();
 		//setting up the space of the 3D array (1 cell correspond to 0.5m 
-		space = new Color[(int)(length*2)+1][(int)(heigth*2)+1][(int)(width*2)+1];
+		space = new Color[(int)(length*2)+2][(int)(heigth*2)+2][(int)(width*2)+2];
 		//inizializing the truck with colors (gray if it's a bound)
 		for(int i = 0;i<space.length; i++){
 			for(int j=0; j<space[0].length;j++){
@@ -55,22 +55,29 @@ public class Truck {
 	//it builds every time the new space with all the parcels inside
 	public void build(){
 		reset();
+		int count = 0;
 		for(Parcel parcel: parcelList){
+			count++;
 			double parcel_width = parcel.width * 2;
 			double parcel_heigth = parcel.heigth * 2;
 			double parcel_length = parcel.length * 2;
 			int coordinates[] = parcel.coordinates;
-			System.out.println(coordinates[0]+"|"+coordinates[1]+"|"+coordinates[2]);
 			for(int i = coordinates[0]; i<coordinates[0]+parcel_length;i++){
 				for(int j = coordinates[2]; j<coordinates[2]+parcel_heigth;j++){
 					for(int k = coordinates[1];k<coordinates[1]+parcel_width;k++){
-						System.out.println(i+"|"+j+"|"+k);
-						space[i][j][k] = Color.RED;
+						if(count == parcelList.size()){
+							space[i][j][k] = Color.BLUE;
+						}else{
+							space[i][j][k] = Color.RED;
+						}
 					}
 				}
 			}
 			
 		}
+		
+	}
+	public void printTruck(){
 		for(int i = 0; i<space.length;i++){
 			for(int j = 0; j<space[0].length;j++){
 				for(int k = 0;k<space[0][0].length;k++){
@@ -78,6 +85,8 @@ public class Truck {
 						System.out.print("1");
 					}else if(space[i][j][k]== Color.GRAY){
 						System.out.print("|");
+					}else if(space[i][j][k]== Color.BLUE){
+						System.out.print("X");
 					}else{
 						System.out.print("0");
 					}

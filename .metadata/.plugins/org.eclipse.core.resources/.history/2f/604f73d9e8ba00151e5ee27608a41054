@@ -1,0 +1,13 @@
+public class GreedyAlgorithm{
+	public static void swap(Double a, Double b){
+		double temp = a;
+		a = b;
+		b = temp;		
+	}
+	public static void main(String[] args){
+		Double a = (double) 2;
+		Double b = (double) 3;
+		swap(a,b);
+		System.out.println(a+"+"+b);
+	}
+}

@@ -3,66 +3,99 @@ import java.util.ArrayList;
 
 public class Load {
 	
-	public boolean availability(Truck truck1, ArrayList<Parcel> list1, int direction, int x, int y, int z){
-		//basecase stop condition
-		if(stop){
-			System.out.println("No more packages can fit inside!");
-			System.exit(0);
+	public void moveDown(Parcel parcel,Truck truck){
+		while(!collide(parcel, truck,3)){
+			move(parcel, 3);
 		}
-		//direction cases
-		if(direction == 1){
-			x++;
+	}
+	public void moveRight(Parcel parcel,Truck truck){
+		while(!collide(parcel, truck,2)){
+			move(parcel, 2);			
 		}
-		if(direction == 2){
-			z++;
+	}
+	public void moveForward(Parcel parcel,Truck truck){
+		while(!collide(parcel, truck,1)){
+			move(parcel, 1);			
 		}
-		if(direction == 3){
-			y++;
-		}
-		//checking
-		Parcel parcel = list1.get(0);
-		
-								
 	}
 	public void move(Parcel parcel,int axis){
 		int coord[] = parcel.getCoord();
 		switch(axis){
 			case 1:
 				parcel.setCoord(coord[0]+1, coord[1], coord[2]);
+				break;
 			case 2:
 				parcel.setCoord(coord[0], coord[1]+1, coord[2]);
+				break;
 			case 3:
 				parcel.setCoord(coord[0], coord[1], coord[2]+1);
+				break;
 		}
 	}
-	public boolean collide(Parcel parcel, Truck truck, int axis){
+	public boolean collide(Parcel parcel, Truck truck, int axis,int rotation){
 		int cX = parcel.coordinates[0];
 		int cY = parcel.coordinates[1];
 		int cZ = parcel.coordinates[2];
 		double parcel_width = parcel.width * 2;
 		double parcel_heigth = parcel.heigth * 2;
 		double parcel_length = parcel.length * 2;
+		boolean statement = false;
+		Parcel test = new Parcel(parcel.type);
+		
+		for(int i = 0; i<rotation; i++){
+			test.rotate();
+		}
 		
 		switch(axis){
 			case 1: 
-					cX++;
-					break;
+					cX+=parcel_length;
+					for(int i = cZ; i<cZ+parcel_heigth;i++){
+						for(int j = cY; j<cY+parcel_width;j++){
+						if(truck.space[cX][i][j]!= Color.WHITE)
+							return true;
+						}
+					}
+					return false;
 			case 2: 
-					cY++;
-					break;
+					cY+=parcel_width;
+					for(int i = cX; i<cX+parcel_length;i++){
+						for(int j = cZ; j<cZ+parcel_heigth;j++){
+						if(truck.space[i][j][cY]!= Color.WHITE)
+							return true;
+						}
+					}
+					return false;
+					
 			case 3: 
-					cZ++;
-					break;
-		}
-		for(int i = cZ; i<=parcel_heigth;i++){
-			for(int j = cY; j<=parcel_width;j++){
-				for(int k = cX;k<=parcel_length;k++){
-					if(truck.space[cX][cY][cZ]!= Color.WHITE)
-						return true;
+					cZ+=parcel_heigth;
+					
+					for(int i = cX; i<cX+parcel_length;i++){
+						for(int j = cY; j<cY+parcel_width;j++){
+							
+								if(truck.space[i][cZ][j]!= Color.WHITE){
+									
+									return true;
+								}
+								
+							}
+					}
+					return false;
+			case 0: 
+
+				for(int i = cX; i<cX+parcel_length;i++){
+					for(int j = cZ; j<cY+parcel_heigth;j++){
+						for(int k = cY; k<cZ+parcel_width;k++)
+							if(truck.space[i][j][k]!= Color.WHITE){
+								
+								return true;
+							}
+							
+						}
 				}
-			}
+				return false;
 		}
-		return false;
+		return statement;
+		
 			
 		
 	}
