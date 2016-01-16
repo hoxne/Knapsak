@@ -1,0 +1,25 @@
+import java.util.ArrayList;
+
+public class Graphics3D {
+	public int[][] points;
+	public int[][] connections;
+	public Graphics3D(ArrayList<Parcel> list){
+		points = new int[list.size()*8][3];
+		connections = new int[points.length][points.length];
+		int count=0;
+		
+		for(Parcel next: list){
+			int[][] pointsBox = next.getPoints();
+			
+			for(int i=count*8; i<(count*8)+8;i++){
+				for(int j = 0; j<3;j++){
+					points[i][j]=pointsBox[i/8][j];
+					System.out.print(pointsBox[i/8][j]);
+					System.out.print("|");
+				}
+				System.out.println("______________");
+			}
+			count++;
+		}
+	}
+}

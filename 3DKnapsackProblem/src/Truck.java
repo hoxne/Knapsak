@@ -9,7 +9,7 @@ public class Truck {
 	public double heigth;
 	public double length;
 	//
-	public List<Parcel> parcelList; //list of parcel that are inside
+	public ArrayList<Parcel> parcelList; //list of parcel that are inside
 	
 	public Truck(){
 		//setting the real dimensions of the truck

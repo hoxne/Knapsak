@@ -1,3 +1,4 @@
+import java.awt.Point;
 
 public class Parcel {
 	
@@ -50,6 +51,43 @@ public class Parcel {
 	public int[] getCoord(){
 		return coordinates;
 		
+	}
+	public int[][] getPoints(){
+		int[][] points = new int[8][3];
+		points[0][0]=coordinates[0]; points[0][1]=coordinates[1]; points[0][2]=coordinates[2]; 
+		points[1][0]=(int)(coordinates[0]+length*2); points[1][1]=coordinates[1]; points[1][2]=coordinates[2]; 
+		points[2][0]=coordinates[0]; points[2][1]=(int)(coordinates[1]+width*2); points[2][2]=coordinates[2]; 
+		points[3][0]=coordinates[0]; points[3][1]=coordinates[1]; points[3][2]=(int)(coordinates[2]+heigth*2); 
+		points[4][0]=(int)(coordinates[0]+length*2); points[4][1]=coordinates[1]; points[4][2]=(int)(coordinates[2]+heigth*2); 
+		points[5][0]=coordinates[0]; points[5][1]=(int)(coordinates[1]+width*2); points[5][2]=(int)(coordinates[2]+heigth*2); 
+		points[6][0]=(int)(coordinates[0]+length*2); points[6][1]=(int)(coordinates[1]+width*2); points[6][2]=coordinates[2]; 
+		points[7][0]=(int)(coordinates[0]+length*2); points[7][1]=(int)(coordinates[1]+width*2); points[7][2]=(int)(coordinates[2]+heigth*2); 
+		return points;
+		
+	}
+	public int[][] getAdjia(){
+		int[][] allPoints = getPoints();
+		int[][] matrix = new int[allPoints.length][allPoints.length];
+		int count;
+		for(int i =0;i<matrix.length;i++){
+			for(int j=0;j<matrix.length;j++){
+				count=0;
+				if(allPoints[i][0]==allPoints[j][0]){
+					count++;
+				}
+				if(allPoints[i][1]==allPoints[j][1]){
+					count++;
+				}
+				if(allPoints[i][2]==allPoints[j][2]){
+					count++;
+				}
+				if(count==2){
+					matrix[i][j]=1;
+				}
+				
+			}
+		}
+		return matrix;
 	}
 	public void rotate(){
 		curr_rot +=1;

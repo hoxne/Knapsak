@@ -3,21 +3,6 @@ import java.util.ArrayList;
 
 public class Load {
 	
-	public void moveDown(Parcel parcel,Truck truck){
-		while(!collide(parcel, truck,3)){
-			move(parcel, 3);
-		}
-	}
-	public void moveRight(Parcel parcel,Truck truck){
-		while(!collide(parcel, truck,2)){
-			move(parcel, 2);			
-		}
-	}
-	public void moveForward(Parcel parcel,Truck truck){
-		while(!collide(parcel, truck,1)){
-			move(parcel, 1);			
-		}
-	}
 	public void move(Parcel parcel,int axis){
 		int coord[] = parcel.getCoord();
 		switch(axis){

@@ -22,7 +22,7 @@ public class GreedyAlgorithm{
 			//Check fits
 			case 2:
 				if(load.collide(parcel, truck, 0,0)){
-					System.out.print("COLLISION FUUCK");
+					
 					switch(parcel.type){
 						case 1: //if A
 							if(load.collide(parcel, truck, 0, 1)){
@@ -56,12 +56,8 @@ public class GreedyAlgorithm{
 				break;
 			//Move to right
 			case 3:
-				System.out.println("Inside 3 case moving right");
 				load.move(parcel, 2);
-				System.out.println(parcel.coordinates[1]+(parcel.width)*2);
-				System.out.println(truck.space[0][0].length -1);
 				if((parcel.coordinates[1]+(parcel.width)*2)>= ((truck.space[0][0].length)-1)){
-					System.out.println("Inside 3 case LIMIT REACHED");
 					int temp = parcel.coordinates[0];
 					parcel.setCoord(temp+1, 1, 1);
 					if((parcel.coordinates[0]+(parcel.length)*2)>= ((truck.space.length)-1)){

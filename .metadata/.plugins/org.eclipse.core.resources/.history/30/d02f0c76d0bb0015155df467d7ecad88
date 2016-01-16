@@ -1,0 +1,54 @@
+public class Test {
+	public static void main(String[] args){
+	/*	
+	Truck truck1 = new Truck();
+	Load load1 = new Load();
+	GreedyAlgorithm algo = new GreedyAlgorithm(truck1, load1);
+	algo.start(1);
+	*/
+	Parcel parcel1 = new Parcel(3);
+	Truck truck1 = new Truck();
+	truck1.put(parcel1);
+	Parcel parcel2 = new Parcel(3);
+	parcel2.setCoord(7, 1, 1);
+	truck1.put(parcel2);
+	Graphics3D graph = new Graphics3D(truck1.parcelList);
+	
+	
+	
+	int[][] points = parcel1.getPoints();
+	
+	for(int i=0;i<points.length;i++){
+		for(int j=0;j<points[0].length;j++){
+			System.out.print(points[i][j]);
+			System.out.print("|");
+		}
+		System.out.println("");
+	}
+	System.out.println("");
+	
+	int[][] points1 = parcel2.getPoints();
+	
+	for(int i=0;i<points1.length;i++){
+		for(int j=0;j<points1[0].length;j++){
+			System.out.print(points1[i][j]);
+			System.out.print("|");
+		}
+		System.out.println("");
+	}
+	System.out.println("");
+	
+	
+	int[][] allP = graph.points;
+	for(int i=0;i<allP.length;i++){
+		for(int j=0;j<allP[0].length;j++){
+			System.out.print(allP[i][j]);
+			System.out.print("|");
+		}
+		System.out.println("");
+	}
+	System.out.println("");
+	}
+	
+
+}
