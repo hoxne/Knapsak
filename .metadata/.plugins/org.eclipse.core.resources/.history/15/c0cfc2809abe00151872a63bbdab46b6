@@ -1,0 +1,93 @@
+import java.awt.event.MouseEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+
+
+public class KeysT implements KeyListener{
+	public Perspective pers;
+	public Graphics3D graph;
+	public float[][] dataP;
+	public float[] centerOfProjection = {0,0,10};
+	final static float defaultZoom=1000;
+
+	public static float currentAngle=0;
+	public static float currentAngleX;
+	public static float currentAngleY;
+	public static float currentAngleZ;
+
+	public static int currentAxis;
+
+	public static float currentZoom;
+	
+	public KeysT(Perspective pers, Graphics3D graph){
+		this.pers = pers;
+		this.graph = graph;
+		this.dataP = graph.points;
+		
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
+	public void keyReleased(KeyEvent e) {
+	}
+
+	public void keyPressed(KeyEvent e) {
+
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_UP: //zoom in
+				currentZoom = currentZoom+100;
+				if(currentZoom>=defaultZoom+200){
+					currentZoom=defaultZoom;
+				}
+				
+				graph.points2D = pers.coordinatesFor2D(dataP, centerOfProjection, currentAxis, getCurrentAngle(currentAxis),currentZoom);
+				graph.repaint();
+				break;
+
+			case KeyEvent.VK_DOWN: //ROTATE z-axis
+					currentAxis = 3;
+					currentAngleZ = currentAngleZ+45;
+					if(currentAngleZ==360){
+						currentAngleZ=0;
+					}
+
+					graph.points2D = pers.coordinatesFor2D(dataP, centerOfProjection, currentAxis, currentAngleZ,currentZoom);
+					graph.repaint();
+				break;
+
+			case KeyEvent.VK_LEFT: //rotate x-axis
+				currentAxis = 1;
+				currentAngleX = currentAngleX+45;
+					if(currentAngleX==360){
+						currentAngleX=0;
+					}
+
+					graph.points2D = pers.coordinatesFor2D(dataP, centerOfProjection, currentAxis, currentAngleX,currentZoom);
+					graph.repaint();
+				break;
+			case KeyEvent.VK_RIGHT: //rotate y-axis
+				currentAxis = 2;
+				currentAngleY = currentAngleY+45;
+				if(currentAngleY==360){
+					currentAngleY=0;
+				}
+
+				graph.points2D = pers.coordinatesFor2D(dataP, centerOfProjection, currentAxis, currentAngleY,currentZoom);
+				graph.repaint();
+				break;
+		} 
+	}
+
+	public double getCurrentAngle(int axis){
+		switch(axis){
+			case 1:
+				return currentAngleX;
+			case 2:
+				return currentAngleY;
+			case 3: 
+				return currentAngleZ;
+		}
+		return currentAngle;
+	}
+}

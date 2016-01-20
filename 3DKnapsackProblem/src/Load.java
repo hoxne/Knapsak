@@ -30,9 +30,10 @@ public class Load {
 		for(int i = 0; i<rotation; i++){
 			test.rotate();
 		}
-		
+	
 		switch(axis){
 			case 1: 
+				
 					cX+=parcel_length;
 					for(int i = cZ; i<cZ+parcel_heigth;i++){
 						for(int j = cY; j<cY+parcel_width;j++){
@@ -42,6 +43,7 @@ public class Load {
 					}
 					return false;
 			case 2: 
+			
 					cY+=parcel_width;
 					for(int i = cX; i<cX+parcel_length;i++){
 						for(int j = cZ; j<cZ+parcel_heigth;j++){
@@ -52,6 +54,7 @@ public class Load {
 					return false;
 					
 			case 3: 
+				
 					cZ+=parcel_heigth;
 					
 					for(int i = cX; i<cX+parcel_length;i++){
@@ -68,14 +71,17 @@ public class Load {
 			case 0: 
 
 				for(int i = cX; i<cX+parcel_length;i++){
-					for(int j = cZ; j<cY+parcel_heigth;j++){
-						for(int k = cY; k<cZ+parcel_width;k++)
+
+					for(int j = cZ; j<cZ+parcel_heigth;j++){
+
+						for(int k = cY; k<cY+parcel_width;k++){
 							if(truck.space[i][j][k]!= Color.WHITE){
 								
 								return true;
 							}
 							
 						}
+					}
 				}
 				return false;
 		}
@@ -86,3 +92,4 @@ public class Load {
 	}
 	
 }
+

@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class GreedyAlgorithm{
 	
@@ -14,20 +15,23 @@ public class GreedyAlgorithm{
 		switch(path){
 			//new Parcel
 			case 1:
-				System.out.println("Inside 1 case, new parcel!");
-				parcel = new Parcel(((int)(Math.random()*3))+1);
 				
+				//parcel = new Parcel(((int)(Math.random()*3))+1);
+				parcel = new Parcel(3);
 				start(2);
 				break;
 			//Check fits
 			case 2:
 				if(load.collide(parcel, truck, 0,0)){
+					System.out.println(parcel.toString());
+					
 					
 					switch(parcel.type){
 						case 1: //if A
 							if(load.collide(parcel, truck, 0, 1)){
 								start(3);
 							}else{
+								System.out.println("Rotated 1 times");
 								parcel.rotate();
 								start(2);
 							}
@@ -37,11 +41,13 @@ public class GreedyAlgorithm{
 								if(load.collide(parcel, truck, 0, 2)){
 									start(3);
 								}else{
+									System.out.println("Rotated 2 times");
 									parcel.rotate();
 									parcel.rotate();
 									start(2);
 								}
 							}else{
+								System.out.println("Rotated 1 times");
 								parcel.rotate();
 								start(2);
 							}
@@ -82,11 +88,13 @@ public class GreedyAlgorithm{
 								if(load.collide(parcel, truck, 3, 2)){
 									start(5);
 								}else{
+									System.out.println("Rotated 2 times");
 									parcel.rotate();
 									parcel.rotate();
 									start(4);
 								}
 							}else{
+								System.out.println("Rotated 1 times");
 								parcel.rotate();
 								start(4);
 							}
@@ -95,6 +103,7 @@ public class GreedyAlgorithm{
 							if(load.collide(parcel, truck, 3, 1)){
 								start(5);
 							}else{
+								System.out.println("Rotated 1 times");
 								parcel.rotate();
 								start(4);
 							}
@@ -106,7 +115,7 @@ public class GreedyAlgorithm{
 				}
 			//Bound or box
 			case 5:
-				if((parcel.coordinates[2]+(parcel.heigth)*2)>=((truck.space[0].length)-1)){
+				if(((parcel.coordinates[2]+(parcel.heigth)*2))+1>=((truck.space[0].length)-1)){
 					start(6);
 				}else{
 					if(load.collide(parcel, truck, 2, 0)){
@@ -116,12 +125,14 @@ public class GreedyAlgorithm{
 									if(load.collide(parcel, truck, 2, 2)){
 										start(6);
 									}else{
+										System.out.println("Rotated 2 times");
 										parcel.rotate();
 										parcel.rotate();
 										load.move(parcel, 2);
 										start(4);
 									}
 								}else{
+									System.out.println("Rotated 1 times");
 									parcel.rotate();
 									load.move(parcel, 2);
 									start(4);
@@ -148,13 +159,16 @@ public class GreedyAlgorithm{
 			//fix
 			case 6:
 				truck.put(parcel);
-				truck.printTruck();
-				System.out.println("_____________________________________________-");
+				
+				//truck.printTruck();
+				//System.out.println(parcel.toString());
+				//Scanner scan = new Scanner(System.in);
+				//int scan1 = scan.nextInt();
+				
 				start(1);
 				break;
 			//finish
 			case 7:
-				System.out.println("OOUT!");
 				break;
 
 		}

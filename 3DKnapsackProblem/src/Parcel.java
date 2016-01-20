@@ -8,7 +8,7 @@ public class Parcel {
 	public int value;
 	public int type;
 	public int[] coordinates; //the origin
-	public int curr_rot;
+	public int curr_rot;      //current rotation
 	
 	public Parcel(int type){
 		switch(type){
@@ -41,7 +41,7 @@ public class Parcel {
 		
 	}
 	public String toString(){
-		return "Width: "+width+" Height: "+heigth+" Length:"+length+" Value: "+this.value;
+		return "X:"+coordinates[0]+" Y: "+coordinates[1]+" Z:"+coordinates[2];
 	}
 	public void setCoord(int x, int y, int z){
 		coordinates[0]=x;
@@ -52,21 +52,36 @@ public class Parcel {
 		return coordinates;
 		
 	}
-	public int[][] getPoints(){
-		int[][] points = new int[8][3];
+	public float[][] getPoints(){
+		System.out.println("Example Printing");
+		float[][] points = new float[8][3];
 		points[0][0]=coordinates[0]; points[0][1]=coordinates[1]; points[0][2]=coordinates[2]; 
-		points[1][0]=(int)(coordinates[0]+length*2); points[1][1]=coordinates[1]; points[1][2]=coordinates[2]; 
-		points[2][0]=coordinates[0]; points[2][1]=(int)(coordinates[1]+width*2); points[2][2]=coordinates[2]; 
-		points[3][0]=coordinates[0]; points[3][1]=coordinates[1]; points[3][2]=(int)(coordinates[2]+heigth*2); 
-		points[4][0]=(int)(coordinates[0]+length*2); points[4][1]=coordinates[1]; points[4][2]=(int)(coordinates[2]+heigth*2); 
-		points[5][0]=coordinates[0]; points[5][1]=(int)(coordinates[1]+width*2); points[5][2]=(int)(coordinates[2]+heigth*2); 
-		points[6][0]=(int)(coordinates[0]+length*2); points[6][1]=(int)(coordinates[1]+width*2); points[6][2]=coordinates[2]; 
-		points[7][0]=(int)(coordinates[0]+length*2); points[7][1]=(int)(coordinates[1]+width*2); points[7][2]=(int)(coordinates[2]+heigth*2); 
+		points[1][0]=(float)(coordinates[0]+length*2); points[1][1]=coordinates[1]; points[1][2]=coordinates[2]; 
+		points[2][0]=coordinates[0]; points[2][1]=(float)(coordinates[1]+width*2); points[2][2]=coordinates[2]; 
+		points[3][0]=coordinates[0]; points[3][1]=coordinates[1]; points[3][2]=(float)(coordinates[2]+heigth*2); 
+		points[4][0]=(float)(coordinates[0]+length*2); points[4][1]=coordinates[1]; points[4][2]=(float)(coordinates[2]+heigth*2); 
+		points[5][0]=coordinates[0]; points[5][1]=(float)(coordinates[1]+width*2); points[5][2]=(float)(coordinates[2]+heigth*2); 
+		points[6][0]=(float)(coordinates[0]+length*2); points[6][1]=(float)(coordinates[1]+width*2); points[6][2]=coordinates[2]; 
+		points[7][0]=(float)(coordinates[0]+length*2); points[7][1]=(float)(coordinates[1]+width*2); points[7][2]=(float)(coordinates[2]+heigth*2); 
+		
+		
+		for(int i = 0; i<points.length;i++){
+			for(int j = 0; j<points[0].length;j++){
+				
+				
+				System.out.print(points[i][j]);
+				System.out.print("|");
+			}
+			System.out.println();
+		}
+		System.out.println(points.length+"|"+points[0].length);
+		
+		
 		return points;
 		
 	}
 	public int[][] getAdjia(){
-		int[][] allPoints = getPoints();
+		float[][] allPoints = getPoints();
 		int[][] matrix = new int[allPoints.length][allPoints.length];
 		int count;
 		for(int i =0;i<matrix.length;i++){

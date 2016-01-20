@@ -1,0 +1,131 @@
+public class Perspective{
+
+	
+	public static double[][] coordinatesFor2D(double [][] dataP, double[] centerOfProjection, int axis, double angle, double zoom){
+		double b = centerOfProjection[0]; 
+		double c = centerOfProjection[1];
+		double d = centerOfProjection[2];
+
+		double [][] matrixP = {{1,0, -b/d, 0}, {0,1,-c/d,0}, {0,0,0,0}, {0,0, -1.0/d,1}};
+		double [][] dataPoints = getXandY2D(matrixMultiplication(matrixP,(createMatrixD(getTranspose(dataP),axis,angle,zoom))));
+		float [][] xxx = new xxx[dataPoints.length][dataPoints[0].length];
+		for(int i = 0; i<dataPoints.length;i++){
+			for(int j = 0; j<dataPoints[0].length;j++){
+				xxx[i][j] = ((float) dataPoints[i][j]);
+				dataPoints[i][j] = xxx[i][j];
+				
+				
+			}
+			
+		}
+		
+		
+		return getTranspose(dataPoints);
+	}
+
+	public static double[][] createMatrixD(double [][] matrix,int axis,double angle,double zoom){
+
+			angle = Math.toRadians(angle);
+
+			double [][] temp = new double [matrix.length+1][matrix[0].length];
+			for(int i=0; i<temp.length; i++){
+				for(int j=0; j<temp[0].length; j++){
+					if(i!=matrix.length){
+						temp[i][j]=matrix[i][j];
+					}
+					else temp[i][j]=1;
+				}
+			}
+
+			switch(axis){
+				case 0:
+				return matrixMultiplication((zoom(zoom)),temp);
+
+				case 1:
+				double [][] aX = {{1,0,0,0}, {0, Math.cos(angle), -(Math.sin(angle)), 0}, {0,Math.sin(angle), Math.cos(angle),0}, {0,0,0,1}};
+				return matrixMultiplication(aX,(matrixMultiplication(zoom(zoom),temp)));
+
+				case 2:
+				double [][] aY = {{Math.cos(angle), 0, Math.sin(angle), 0}, {0,1,0,0}, {-(Math.sin(angle)),0, Math.cos(angle),0}, {0,0,0,1}};
+				return matrixMultiplication(aY,(matrixMultiplication(zoom(zoom),temp)));
+
+				case 3:
+				double [][] aZ = {{Math.cos(angle), -(Math.sin(angle)),0, 0}, {Math.sin(angle), Math.cos(angle),0,0}, {0,0,1,0}, {0,0,0,1}};
+				return matrixMultiplication(aZ,(matrixMultiplication(zoom(zoom),temp)));
+
+			}
+			return temp;
+	}
+
+	/**
+		divides the top 3 entries in each column with the corresponding 4-th entry
+		Discard the third and the fourth row
+		@param matrix
+		@return the new matrix after perfoming the above explained actions
+		*/
+	public static double[][] getXandY2D(double[][] matrix){
+
+		double [][] temp0 = new double [matrix.length][matrix[0].length];
+
+		for(int i=0; i<matrix.length-1; i++){
+			for(int j=0; j<matrix[0].length; j++){
+				temp0 [i][j] = matrix[i][j]/matrix[matrix.length-1][j];
+			}
+		}
+
+		double[][] temp = new double[2][matrix[0].length];
+		for(int i=0; i<2; i++){
+			for(int j=0; j<matrix[0].length; j++){
+				temp[i][j] = temp0[i][j];
+			}
+		}
+
+		return temp;
+	}
+
+	public static double[][] matrixMultiplication(double[][] matrixA, double [][] matrixB){
+
+		double [][] temp = new double [matrixA.length][matrixB[0].length];
+
+    	
+    	for (int i = 0; i<matrixA.length; i++) {
+    		for (int j = 0; j<matrixB[0].length ; j++) {
+    			for (int x = 0; x<matrixA[0].length ; x++) {
+    				temp[i][j]+=matrixA[i][x]*matrixB[x][j];
+    			}
+    		}
+    	}
+    	return temp;
+	}
+
+	//creates a matrix with @param zoom in its main diagonal. only the lest entry is a 1.
+	public static double[][] zoom(double zoom){
+
+		double [][] temp = new double [4][4];
+		
+		for(int i=0; i<temp.length; i++){
+			for(int j=0; j<temp[0].length; j++){
+				if(i!=j){
+					temp[i][j] = 0;
+				}
+				else{
+					temp[i][j] = (zoom/100);
+				}
+			}
+		}
+
+		temp[temp.length-1][temp.length-1]=1;
+		return temp;
+	}
+
+	public static double[][] getTranspose(double [][] matrix){
+		double [][] temp = new double [matrix[0].length][matrix.length];
+
+		for(int i=0; i<matrix.length; i++){
+			for(int j =0; j<matrix[0].length; j++){
+				temp[j][i] = matrix[i][j];
+			}
+		}
+		return temp;
+	}
+}

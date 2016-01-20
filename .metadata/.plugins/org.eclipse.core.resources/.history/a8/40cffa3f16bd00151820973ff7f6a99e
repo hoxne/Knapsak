@@ -1,0 +1,220 @@
+public class Perspective{
+
+	/*
+	public static void main(String[] args) {
+		double [][] matrixB = { 
+								{-6.5, -6.5, -6.5, -6.5, -2.5, -2.5, -0.75, -0.75, 3.25, 3.25, 4.5, 4.5, 6.5, 6.5, 6.5, 6.5},
+								{-2, -2, 0.5, 0.5, 0.5, 0.5, 2, 2, 2, 2, 0.5, 0.5, 0.5, 0.5, -2, -2},
+								{-2.5, 2.5, 2.5, -2.5, -2.5, 2.5, -2.5, 2.5, -2.5, 2.5, -2.5, 2.5, -2.5, 2.5,2.5, -2.5},
+								//{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+							};
+
+		double [] centerOfProjection = {0,0,10};
+
+		double [][] temp1= coordinatesFor2D(matrixB,centerOfProjection,1,45);
+		double [][] temp2= coordinatesFor2D(matrixB,centerOfProjection,200);
+		double [][] temp3= coordinatesFor2D(matrixB,centerOfProjection,0,0);
+
+		for(int i =0; i<temp1.length; i++){
+			System.out.println();
+			System.out.println();
+			for(int j =0; j<temp1[0].length; j++){
+				System.out.print(temp1[i][j]+ " ");
+			}
+		}
+
+		System.out.println();
+		System.out.println();
+
+		for(int i =0; i<temp2.length; i++){
+			System.out.println();
+			System.out.println();
+			for(int j =0; j<temp2[0].length; j++){
+				System.out.print(temp2[i][j]+ " ");
+			}
+		}
+
+		System.out.println();
+		System.out.println();
+
+		for(int i =0; i<temp3.length; i++){
+			System.out.println();
+			System.out.println();
+			for(int j =0; j<temp3[0].length; j++){
+				System.out.print(temp3[i][j]+ " ");
+			}
+		}
+
+	}
+
+	*/
+
+	/**
+	method that converts 3-dimensional coordinates (x,y,z) into 2-dimensional (x*,y*) points 
+		at a perspective when rotate 0-360 degrees
+	@param dataP 3-dimensional coordinates (x,y,z) in each column. dataP has size(3,amountofPoints)
+	@param centerOfProjection (b,c,d) coordinates for the center of projection d!=0
+	@param axis axis where you want to rotate (0=no axis, 1=x axis, 2=y axis, 3= z axis)
+	@param angle angle that you want to rotate in degrees.
+	@return contains dataPoints 2-dimensional coordinates(x*,y*) for the perspective projection in each column
+	*/
+	public static double[][] coordinatesFor2D(double [][]dataP, double[] centerOfProjection, int axis, double angle){
+		
+		double b = centerOfProjection[0]; 
+		double c = centerOfProjection[1];
+		double d = centerOfProjection[2];
+		dataP = getTranspose(dataP);
+		double [][] matrixP = {{1,0, -b/d, 0}, {0,1,-c/d,0}, {0,0,0,0}, {0,0, -1.0/d,1}};
+
+		double [][] dataPoints = getXandY2D(matrixMultiplication(matrixP,createMatrixD(dataP,axis,angle)));
+		
+		dataPoints = getTranspose(dataPoints);
+		return dataPoints;
+
+	}
+
+	/**
+	method that converts 3-dimensional coordinates (x,y,z) into 2-dimensional (x*,y*) points 
+		at a perspective when zoomed in
+	@param dataP 3-dimensional coordinates (x,y,z) in each column
+	@param centerOfProjection (b,c,d) coordinates for the center of projection d!=0
+	@param zoom percentage of which you wish to magnify
+	@return dataPoints contains 2-dimensional coordinates(x*,y*) for the perspective projection in each column
+	*/
+	public static double[][] getTranspose(double [][] matrix){
+		double [][] temp = new double [matrix[0].length][matrix.length];
+
+		for(int i=0; i<matrix.length; i++){
+			for(int j =0; j<matrix[0].length; j++){
+				temp[j][i] = matrix[i][j];
+			}
+		}
+		return temp;
+	}
+
+	public static double[][] coordinatesFor2D(double [][] dataP, double[] centerOfProjection, double zoom){
+		double b = centerOfProjection[0]; 
+		double c = centerOfProjection[1];
+		double d = centerOfProjection[2];
+
+		double [][] matrixP = {{1,0, -b/d, 0}, {0,1,-c/d,0}, {0,0,0,0}, {0,0, -1.0/d,1}};
+		double [][] dataPoints = getXandY2D(matrixMultiplication(matrixP,matrixMultiplication(zoom(zoom),createMatrixD(dataP,0,0))));
+		return dataPoints;
+	}
+
+	/**
+	adds a row full of 1 to the matrix and multiplies the matrix if it needs to be rotated
+	@param matrix 2D-array containing 3-dimensional coordinates (x,y,z) in each column
+	@param axis axis where you want to rotate (0=no axis, 1=x axis, 2=y axis, 3= z axis)
+	@param angle angle that you want to rotate in degrees.
+	@return a 2D-array after performin the actions above.
+	*/
+	public static double[][] createMatrixD(double [][] matrix,int axis,double angle){
+
+			angle = Math.toRadians(angle);
+
+			double [][] temp = new double [matrix.length+1][matrix[0].length];
+			for(int i=0; i<temp.length; i++){
+				for(int j=0; j<temp[0].length; j++){
+					if(i!=matrix.length){
+						temp[i][j]=matrix[i][j];
+					}
+					else temp[i][j]=1;
+				}
+			}
+
+			switch(axis){
+				case 0:
+				double [][] iD = {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}};
+				return matrixMultiplication(iD,temp);
+
+				case 1:
+				double [][] aX = {{1,0,0,0}, {0, Math.cos(angle), -(Math.sin(angle)), 0}, {0,Math.sin(angle), Math.cos(angle),0}, {0,0,0,1}};
+				return matrixMultiplication(aX,temp);
+
+				case 2:
+				double [][] aY = {{Math.cos(angle), 0, Math.sin(angle), 0}, {0,1,0,0}, {-(Math.sin(angle)),0, Math.cos(angle),0}, {0,0,0,1}};
+				return matrixMultiplication(aY,temp);
+
+				case 3:
+				double [][] aZ = {{Math.cos(angle), -(Math.sin(angle)),0, 0}, {Math.sin(angle), Math.cos(angle),0,0}, {0,0,1,0}, {0,0,0,1}};
+				return matrixMultiplication(aZ,temp);
+
+			}
+			return temp;
+	}
+
+	/**
+		divides the top 3 entries in each column with the corresponding 4-th entry
+		Discard the third and the fourth row
+		@param matrix
+		@return the new matrix after perfoming the above explained actions
+		*/
+	public static double[][] getXandY2D(double[][] matrix){
+
+		double [][] temp0 = new double [matrix.length][matrix[0].length];
+
+		for(int i=0; i<matrix.length-1; i++){
+			for(int j=0; j<matrix[0].length; j++){
+				temp0 [i][j] = matrix[i][j]/matrix[matrix.length-1][j];
+			}
+		}
+
+		double[][] temp = new double[2][matrix[0].length];
+		for(int i=0; i<2; i++){
+			for(int j=0; j<matrix[0].length; j++){
+				temp[i][j] = temp0[i][j];
+			}
+		}
+
+		return temp;
+	}
+
+	public static double[][] matrixMultiplication(double[][] matrixA, double [][] matrixB){
+
+		double [][] temp = new double [matrixA.length][matrixB[0].length];
+
+    	
+    	for (int i = 0; i<matrixA.length; i++) {
+    		for (int j = 0; j<matrixB[0].length ; j++) {
+    			for (int x = 0; x<matrixA[0].length ; x++) {
+    				temp[i][j]+=matrixA[i][x]*matrixB[x][j];
+    			}
+    		}
+    	}
+    	return temp;
+	}
+
+	//creates a matrix with @param zoom in its main diagonal. only the lest entry is a 1.
+	public static double[][] zoom(double zoom){
+
+		double [][] temp = new double [4][4];
+		
+		for(int i=0; i<temp.length; i++){
+			for(int j=0; j<temp[0].length; j++){
+				if(i!=j){
+					temp[i][j] = 0;
+				}
+				else{
+					temp[i][j] = (zoom/100);
+				}
+			}
+		}
+
+		temp[temp.length-1][temp.length-1]=1;
+		return temp;
+	}
+
+	/*
+	public static void addConnections(double [][] dataPoints, int adjacencyMatrix){
+
+		for(int i=0; i<adjacencyMatrix.length; i++){
+			for(int j=0; j<adjacencyMatrix[0].length; j++){
+				if(adjacencyMatrix[i][j]==1){
+					//connect (dataPoints[0][i],dataPoints[1][i]) and (dataPoints[0][j],dataPoints[1][j])
+				}
+			}
+		}
+	}
+	*/
+}

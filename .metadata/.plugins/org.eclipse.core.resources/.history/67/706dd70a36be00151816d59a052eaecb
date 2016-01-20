@@ -1,0 +1,99 @@
+
+public class RealGreedy {
+	public int x;
+	public int y;
+	public int z;
+	public Truck truck;
+	public Load load;
+	public Parcel parcel;
+ 	public RealGreedy(Truck truck, Load load){
+ 		
+ 		this.x = 1;
+ 		this.y = 1;
+ 		this.z = 8;
+ 		
+ 		this.truck = truck;
+ 		this.load = load;
+		
+		
+	}
+ 	
+ 	public void start(int path){
+ 		switch(path){
+ 			case 1: //Parcel A
+	 			parcel = new Parcel(1);
+	 			parcel.setCoord(x, y, z);
+	 			if(load.collide(parcel, truck, 0, 0)){
+	 				if(load.collide(parcel, truck, 0, 1)){
+	 					start(2);
+	 				}else{
+	 					parcel.rotate();
+	 					truck.put(parcel);
+	 					start(4);
+	 				}
+	 			}else{
+	 				truck.put(parcel);
+	 				start(4);
+	 			}
+	 			break;
+ 			case 2: //Parcel B
+ 				parcel = new Parcel(2);
+	 			parcel.setCoord(x, y, z);
+	 			if(load.collide(parcel, truck, 0, 0)){
+	 				if(load.collide(parcel, truck, 0, 1)){
+	 					if(load.collide(parcel, truck, 0, 2)){
+	 		 				start(3);
+	 		 			}else{
+	 		 				parcel.rotate();
+	 		 				parcel.rotate();
+	 		 				truck.put(parcel);
+	 		 				start(4);
+	 		 			}
+		 			}else{
+		 				parcel.rotate();
+ 		 				truck.put(parcel);
+ 		 				start(4);
+		 			}
+	 			}else{
+	 				truck.put(parcel);
+		 			start(4);
+	 			}
+ 				break;
+ 			case 3: //Parcel C
+ 				parcel = new Parcel(3);
+	 			parcel.setCoord(x, y, z);
+	 			if(load.collide(parcel, truck, 0, 0)){
+	 				start(4);
+	 			}else{
+	 				truck.put(parcel);
+	 				start(4);
+	 			}
+ 				break;
+ 			case 4:
+ 				y++;
+ 				if(y>=6){
+ 					System.out.println("YYYYYYYY");
+ 					y=1;
+ 					z--;
+ 					if(z<=0){
+ 						z=8;
+ 						x++;
+ 						if(x>=34){
+ 							//END
+ 							start(5);
+ 						}else{
+ 							start(1);
+ 						}
+ 					}else{
+						start(1);
+					}
+ 				}else{
+					start(1);
+				}
+ 				break;
+ 			case 5:
+ 				System.out.println("END");
+ 				break;
+ 		}
+ 	}
+}

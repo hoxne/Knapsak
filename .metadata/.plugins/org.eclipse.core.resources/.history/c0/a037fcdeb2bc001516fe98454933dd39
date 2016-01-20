@@ -1,0 +1,40 @@
+
+public class Test2 {
+	public static void main(String[] args){
+		
+		
+		
+		double[][] array = new double[16][3];
+		array[0][0]= -6.5; array[0][1]= -2; array[0][2]= -2.5;
+		array[1][0]= -6.5; array[1][1]= -2; array[1][2]= 2.5;
+		array[2][0]= -6.5; array[2][1]= 0.5; array[2][2]= 2.5;
+		array[3][0]= -6.5; array[3][1]= 0.5; array[3][2]= -2.5;
+		array[4][0]= -2.5; array[4][1]= 0.5; array[4][2]= -2.5;
+		array[5][0]= -2.5; array[5][1]= 0.5; array[5][2]= 2.5;
+		array[6][0]= -0.75; array[6][1]= 2; array[6][2]= -2.5;
+		array[7][0]= -0.75; array[7][1]= 2; array[7][2]= 2.5;
+		array[8][0]= 3.25; array[8][1]= 2; array[8][2]= -2.5;
+		array[9][0]= 3.25; array[9][1]= 2; array[9][2]= 2.5;
+		array[10][0]= 4.5; array[10][1]= 0.5; array[10][2]= -2.5;
+		array[11][0]= 4.5; array[11][1]= 0.5; array[11][2]= 2.5;
+		array[12][0]= 6.5; array[12][1]= 0.5; array[12][2]= -2.5;
+		array[13][0]= 6.5; array[13][1]= 0.5; array[13][2]= 2.5;
+		array[14][0]= 6.5; array[14][1]= -2; array[14][2]= 2.5;
+		array[15][0]= 6.5; array[15][1]= -2; array[15][2]= -2.5;
+		
+		Perspective pers = new Perspective();
+		double[] view = {0,0,10};
+		double[][] array1 = new double[16][2];
+		array1 = pers.coordinatesFor2D(array, view);
+		for(int i = 0; i<array1.length;i++){
+			for(int j = 0; j<array1[0].length;j++){
+				System.out.print(array1[i][j]);
+				System.out.print("|");
+			}
+			System.out.println();
+		}
+	
+		
+		
+	}
+}

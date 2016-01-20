@@ -1,0 +1,120 @@
+public class Perspective{
+
+	
+	public static float [][] coordinatesFor2D(float [][] dataP, float [] centerOfProjection, int axis, float  angle, float zoom){
+		float b = centerOfProjection[0]; 
+		float  c = centerOfProjection[1];
+		float  d = centerOfProjection[2];
+
+		float  [][] matrixP = {{1,0, -b/d, 0}, {0,1,-c/d,0}, {0,0,0,0}, {0,0, (float) (-1.0/d),1}};
+		float  [][] dataPoints = getXandY2D(matrixMultiplication(matrixP,(createMatrixD(getTranspose(dataP),axis,angle,zoom))));
+
+		return getTranspose(dataPoints);
+	}
+
+	public static float [][] createMatrixD(float  [][] matrix,int axis,float  angle,float zoom){
+
+			angle = (float) Math.toRadians(angle);
+
+			float  [][] temp = new float  [matrix.length+1][matrix[0].length];
+			for(int i=0; i<temp.length; i++){
+				for(int j=0; j<temp[0].length; j++){
+					if(i!=matrix.length){
+						temp[i][j]=matrix[i][j];
+					}
+					else temp[i][j]=1;
+				}
+			}
+
+			switch(axis){
+				case 0:
+				return matrixMultiplication((zoom(zoom)),temp);
+
+				case 1:
+				float  [][] aX = {{1,0,0,0}, {0, (float) Math.cos(angle), (float) -(Math.sin(angle)), 0}, {0,(float) Math.sin(angle), (float) Math.cos(angle),0}, {0,0,0,1}};
+				return matrixMultiplication(aX,(matrixMultiplication(zoom(zoom),temp)));
+
+				case 2:
+				float [][] aY = {{(float) Math.cos(angle), 0, (float) Math.sin(angle), 0}, {0,1,0,0}, {(float) -(Math.sin(angle)),0, (float) Math.cos(angle),0}, {0,0,0,1}};
+				return matrixMultiplication(aY,(matrixMultiplication(zoom(zoom),temp)));
+
+				case 3:
+				float [][] aZ = {{(float) Math.cos(angle), (float) -(Math.sin(angle)),0, 0}, {(float) Math.sin(angle), (float) Math.cos(angle),0,0}, {0,0,1,0}, {0,0,0,1}};
+				return matrixMultiplication(aZ,(matrixMultiplication(zoom(zoom),temp)));
+
+			}
+			return temp;
+	}
+
+	/**
+		divides the top 3 entries in each column with the corresponding 4-th entry
+		Discard the third and the fourth row
+		@param matrix
+		@return the new matrix after perfoming the above explained actions
+		*/
+	public static float[][] getXandY2D(float[][] matrix){
+
+		float [][] temp0 = new float [matrix.length][matrix[0].length];
+
+		for(int i=0; i<matrix.length-1; i++){
+			for(int j=0; j<matrix[0].length; j++){
+				temp0 [i][j] = matrix[i][j]/matrix[matrix.length-1][j];
+			}
+		}
+
+		float[][] temp = new float[2][matrix[0].length];
+		for(int i=0; i<2; i++){
+			for(int j=0; j<matrix[0].length; j++){
+				temp[i][j] = temp0[i][j];
+			}
+		}
+
+		return temp;
+	}
+
+	public static float[][] matrixMultiplication(float[][] matrixA, float [][] matrixB){
+
+		float [][] temp = new float [matrixA.length][matrixB[0].length];
+
+    	
+    	for (int i = 0; i<matrixA.length; i++) {
+    		for (int j = 0; j<matrixB[0].length ; j++) {
+    			for (int x = 0; x<matrixA[0].length ; x++) {
+    				temp[i][j]+=matrixA[i][x]*matrixB[x][j];
+    			}
+    		}
+    	}
+    	return temp;
+	}
+
+	//creates a matrix with @param zoom in its main diagonal. only the lest entry is a 1.
+	public static float[][] zoom(float zoom){
+
+		float [][] temp = new float [4][4];
+		
+		for(int i=0; i<temp.length; i++){
+			for(int j=0; j<temp[0].length; j++){
+				if(i!=j){
+					temp[i][j] = 0;
+				}
+				else{
+					temp[i][j] = (zoom/100);
+				}
+			}
+		}
+
+		temp[temp.length-1][temp.length-1]=1;
+		return temp;
+	}
+
+	public static float[][] getTranspose(float [][] matrix){
+		float [][] temp = new float [matrix[0].length][matrix.length];
+
+		for(int i=0; i<matrix.length; i++){
+			for(int j =0; j<matrix[0].length; j++){
+				temp[j][i] = matrix[i][j];
+			}
+		}
+		return temp;
+	}
+}
